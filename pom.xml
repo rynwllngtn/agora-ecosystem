@@ -11,6 +11,7 @@
 
     <modules>
         <module>agora-common</module>
+        <module>agora-identity</module>
     </modules>
 
     <properties>
@@ -24,6 +25,7 @@
             <dependency>
                 <groupId>dev.rynwllngtn</groupId>
                 <artifactId>agora-common</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>

@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: agora-identity
+  config:
+    import: optional:file:agora-identity/.env[.properties]
+
+  datasource:
+    url: ${db_url}
+    username: ${db_username}
+    password: ${db_password}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+  flyway:
+    enabled: true
+    default-schema: identity
+    create-schemas: true

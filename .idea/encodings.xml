@@ -3,6 +3,8 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/agora-common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/agora-common/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/agora-identity/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/agora-identity/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/agora-samples/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/agora-samples/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
