@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-@Getter @NoArgsConstructor @EqualsAndHashCode(callSuper = false)
+@Getter @NoArgsConstructor @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
 @Entity @Table(name = "identities")
 public class Identity extends AuditableEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.UUID)
+    @Id @EqualsAndHashCode.Include
     @Column(name = "id", nullable = false, updatable = false)
-    private UUID id;
+    private UUID id = UUID.randomUUID();
 
     @Column(name = "cpf", nullable = false, unique = true, length = 11)
     private String cpf;
@@ -22,7 +22,7 @@ public class Identity extends AuditableEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "status", nullable = false)
