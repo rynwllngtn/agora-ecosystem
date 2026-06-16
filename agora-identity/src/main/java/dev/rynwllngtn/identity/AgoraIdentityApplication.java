@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(scanBasePackages = {
-        "dev.rynwllngtn.common",
-        "dev.rynwllngtn.identity"
+        "dev.rynwllngtn.identity",
+        "dev.rynwllngtn.common"
 })
 public class AgoraIdentityApplication {
     static void main(String[] args) {
