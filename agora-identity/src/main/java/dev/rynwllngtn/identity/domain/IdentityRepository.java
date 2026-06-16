@@ -7,4 +7,6 @@ public interface IdentityRepository {
 
     Optional<Identity> findById(UUID id);
 
+    Identity save(Identity identity);
+
 }

@@ -52,7 +52,7 @@ public interface IdentityAPI {
 
     @Operation(
             summary = "Rota para a criação de nova Identity",
-            operationId = "create"
+            operationId = "save"
     )
     @ApiResponse(
             responseCode = "201",
@@ -117,7 +117,7 @@ public interface IdentityAPI {
                     description = "RequestBody para atualização de senha",
                     required = true
             )
-            @RequestBody @Valid IdentityUpdatePasswordRequestDto updatePasswordRequestDto
+            @RequestBody @Valid IdentityUpdatePasswordRequestDto updateRequestDto
     ) {
         throw new UnsupportedOperationException();
     }
@@ -156,7 +156,7 @@ public interface IdentityAPI {
                     description = "RequestBody para atualização de email",
                     required = true
             )
-            @RequestBody @Valid IdentityUpdateEmailRequestDto updateEmailRequestDto
+            @RequestBody @Valid IdentityUpdateEmailRequestDto updateRequestDto
     ) {
         throw new UnsupportedOperationException();
     }

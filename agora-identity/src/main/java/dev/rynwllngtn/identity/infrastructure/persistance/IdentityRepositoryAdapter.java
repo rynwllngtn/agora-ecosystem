@@ -19,4 +19,9 @@ public class IdentityRepositoryAdapter implements IdentityRepository {
         return identityRepository.findById(id);
     }
 
+    @Override
+    public Identity save(Identity identity) {
+        return identityRepository.save(identity);
+    }
+
 }
