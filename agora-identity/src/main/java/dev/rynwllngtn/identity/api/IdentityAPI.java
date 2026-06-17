@@ -117,8 +117,7 @@ public interface IdentityAPI {
                     description = "RequestBody para atualização de senha",
                     required = true
             )
-            @RequestBody @Valid IdentityUpdatePasswordRequestDto updateRequestDto
-    ) {
+            @RequestBody @Valid IdentityUpdatePasswordRequestDto updateRequestDto) {
         throw new UnsupportedOperationException();
     }
 
@@ -156,8 +155,7 @@ public interface IdentityAPI {
                     description = "RequestBody para atualização de email",
                     required = true
             )
-            @RequestBody @Valid IdentityUpdateEmailRequestDto updateRequestDto
-    ) {
+            @RequestBody @Valid IdentityUpdateEmailRequestDto updateRequestDto) {
         throw new UnsupportedOperationException();
     }
 
@@ -185,8 +183,7 @@ public interface IdentityAPI {
                     description = "ID da Identity para busca",
                     required = true
             )
-            @PathVariable(value = "id") UUID id
-    ) {
+            @PathVariable(value = "id") UUID id) {
         throw new UnsupportedOperationException();
     }
 
@@ -214,8 +211,7 @@ public interface IdentityAPI {
                     description = "ID da Identity para busca",
                     required = true
             )
-            @PathVariable(value = "id") UUID id
-    ) {
+            @PathVariable(value = "id") UUID id) {
         throw new UnsupportedOperationException();
     }
 
@@ -243,8 +239,7 @@ public interface IdentityAPI {
                     description = "ID da Identity para busca",
                     required = true
             )
-            @PathVariable(value = "id") UUID id
-    ) {
+            @PathVariable(value = "id") UUID id) {
         throw new UnsupportedOperationException();
     }
 
