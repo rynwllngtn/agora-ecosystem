@@ -22,7 +22,6 @@ public class IdentityServiceImplementation implements IdentityService {
     private final IdentityRepository identityRepository;
     private final IdentityMapper identityMapper;
 
-    @Transactional(readOnly = true)
     private Identity findByIdOrThrow(UUID id) {
         Optional<Identity> optionalIdentity = identityRepository.findById(id);
         return optionalIdentity.orElseThrow(
@@ -58,7 +57,7 @@ public class IdentityServiceImplementation implements IdentityService {
     @Transactional
     public IdentityResponseDto changeEmail(UUID id, IdentityUpdateEmailRequestDto updateRequestDto) {
         Identity identity = findByIdOrThrow(id);
-        identity.changePassword(updateRequestDto.newEmail());
+        identity.changeEmail(updateRequestDto.newEmail());
         identity = identityRepository.save(identity);
         return identityMapper.toResponseDto(identity);
     }

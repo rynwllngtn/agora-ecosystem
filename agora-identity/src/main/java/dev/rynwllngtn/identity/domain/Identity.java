@@ -5,14 +5,19 @@ import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.UUID;
 
 @Getter @NoArgsConstructor @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+@EntityListeners(value = AuditingEntityListener.class)
 @Entity @Table(name = "identities")
 public class Identity extends AuditableEntity {
 
-    @Id @EqualsAndHashCode.Include
+    @Id
+    @EqualsAndHashCode.Include
     @Column(name = "id", nullable = false, updatable = false)
     private UUID id = UUID.randomUUID();
 
@@ -26,7 +31,7 @@ public class Identity extends AuditableEntity {
     private String email;
 
     @Column(name = "status", nullable = false)
-    @Enumerated(value = EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private IdentityStatus status;
 
     public Identity(String cpf, String password, String email) {
