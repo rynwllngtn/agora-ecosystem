@@ -20,6 +20,16 @@ public class IdentityRepositoryAdapter implements IdentityRepository {
     }
 
     @Override
+    public boolean existsByCpf(String cpf) {
+        return identityRepository.existsByCpf(cpf);
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return identityRepository.existsByEmail(email);
+    }
+
+    @Override
     public Identity save(Identity identity) {
         return identityRepository.save(identity);
     }

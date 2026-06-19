@@ -21,4 +21,11 @@ public record IdentityCreateRequestDto(
                 message = "O tamanho do senha deve ser entre 8 e 24 dígitos"
         )
         String password
-) {}
+) {
+    public boolean isCpfUsed(String cpf) {
+        return this.cpf.equals(cpf);
+    }
+    public boolean isEmailUsed(String email) {
+        return this.email.equals(email);
+    }
+}
