@@ -34,10 +34,10 @@ public class Identity extends AuditableEntity {
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private IdentityStatus status;
 
-    public Identity(String cpf, String password, String email) {
+    public Identity(String cpf, String email, String password) {
         this.cpf = cpf;
-        this.password = password;
         this.email = email;
+        this.password = password;
         this.status = IdentityStatus.ACTIVE;
     }
 

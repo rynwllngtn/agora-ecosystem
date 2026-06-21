@@ -1,6 +1,9 @@
 package dev.rynwllngtn.identity.domain;
 
+import dev.rynwllngtn.identity.builder.IdentityBuilder;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -10,66 +13,84 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class IdentityTest {
 
-    private Identity identity;
+    private Identity mockIdentity;
 
     @BeforeEach
     void setUp() {
-        identity = new Identity("11122233344", "password", "email@email.com");
+        mockIdentity = IdentityBuilder.Entity.valid().build();
     }
 
-    @Test
-    void shouldInitializeValidIdentity() {
-        assertNotNull(identity);
-        assertNotNull(identity.getId());
+    @Nested
+    @DisplayName(value = "Testes de inicialização")
+    class InitializationTest {
 
-        UUID id = UUID.randomUUID();
-        Identity identity2 = new Identity("11122233344", "password", "email@email.com");
+        @Test
+        void shouldInitializeValidIdentity() {
+            assertNotNull(mockIdentity);
+            assertNotNull(mockIdentity.getId());
 
-        ReflectionTestUtils.setField(
-                identity,
-                "id",
-                id
-        );
-        ReflectionTestUtils.setField(
-                identity2,
-                "id",
-                id
-        );
+            UUID id = UUID.randomUUID();
+            Identity mockIdentity2 = IdentityBuilder.Entity.valid().build();
 
-        assertEquals(identity, identity2);
-        assertEquals("11122233344", identity.getCpf());
-        assertEquals(IdentityStatus.ACTIVE, identity.getStatus());
+            ReflectionTestUtils.setField(
+                    mockIdentity,
+                    "id",
+                    id
+            );
+            ReflectionTestUtils.setField(
+                    mockIdentity2,
+                    "id",
+                    id
+            );
+
+            assertEquals(mockIdentity, mockIdentity2);
+            assertEquals(IdentityBuilder.defaultCpf, mockIdentity.getCpf());
+            assertEquals(IdentityStatus.ACTIVE, mockIdentity.getStatus());
+        }
+
     }
 
-    @Test
-    void shouldUpdateTheEmail() {
-        identity.changeEmail("newEmail@email.com");
-        assertEquals("newEmail@email.com", identity.getEmail());
+    @Nested
+    @DisplayName(value = "Testes de atualização de dados")
+    class UpdatingDataTest {
+
+        @Test
+        void shouldUpdateTheEmail() {
+            mockIdentity.changeEmail(IdentityBuilder.updateEmail);
+            assertEquals(IdentityBuilder.updateEmail, mockIdentity.getEmail());
+        }
+
+        @Test
+        void shouldUpdateThePassword() {
+            mockIdentity.changePassword(IdentityBuilder.updatePassword);
+            assertEquals(IdentityBuilder.updatePassword, mockIdentity.getPassword());
+        }
+
     }
 
-    @Test
-    void shouldUpdateThePassword() {
-        identity.changePassword("newPassword");
-        assertEquals("newPassword", identity.getPassword());
-    }
+    @Nested
+    @DisplayName(value = "Testes de mudança de status")
+    class UpdatingStatusTest {
 
-    @Test
-    void shouldChangeStatusToDeactivated() {
-        identity.deactivate();
-        assertEquals(IdentityStatus.DEACTIVATED, identity.getStatus());
-    }
+        @Test
+        void shouldChangeStatusToDeactivated() {
+            mockIdentity.deactivate();
+            assertEquals(IdentityStatus.DEACTIVATED, mockIdentity.getStatus());
+        }
 
-    @Test
-    void shouldChangeStatusToSuspended() {
-        identity.suspend();
-        assertEquals(IdentityStatus.SUSPENDED, identity.getStatus());
-    }
+        @Test
+        void shouldChangeStatusToSuspended() {
+            mockIdentity.suspend();
+            assertEquals(IdentityStatus.SUSPENDED, mockIdentity.getStatus());
+        }
 
-    @Test
-    void shouldChangeStatusToActive_whenSuspended() {
-        identity.suspend();
-        identity.activate();
-        assertEquals(IdentityStatus.ACTIVE, identity.getStatus());
+        @Test
+        void shouldChangeStatusToActiveWhenSuspended() {
+            mockIdentity.suspend();
+            mockIdentity.activate();
+            assertEquals(IdentityStatus.ACTIVE, mockIdentity.getStatus());
+        }
+
     }
 
 }

@@ -1,6 +1,8 @@
 package dev.rynwllngtn.identity.application.mapper;
 
+import dev.rynwllngtn.identity.application.dto.IdentityCreateRequestDto;
 import dev.rynwllngtn.identity.application.dto.IdentityResponseDto;
+import dev.rynwllngtn.identity.builder.IdentityBuilder;
 import dev.rynwllngtn.identity.domain.Identity;
 import dev.rynwllngtn.identity.domain.IdentityStatus;
 import org.junit.jupiter.api.Test;
@@ -14,7 +16,7 @@ class IdentityMapperTest {
 
     @Test
     void shouldMapIdentityToIdentityResponseDto() {
-        Identity identity = new Identity("11122233344", "password", "email@email.com");
+        Identity identity = IdentityBuilder.Entity.valid().build();
         identity.deactivate();
 
         IdentityResponseDto responseDto = identityMapper.toResponseDto(identity);
@@ -23,6 +25,18 @@ class IdentityMapperTest {
         assertEquals(identity.getId(), responseDto.id());
         assertEquals(identity.getEmail(), responseDto.email());
         assertEquals(IdentityStatus.DEACTIVATED, responseDto.status());
+    }
+
+    @Test
+    void shouldMapIdentityCreateRequestDtoToIdentity() {
+        IdentityCreateRequestDto createRequestDto = IdentityBuilder.CreateRequest.valid().build();
+
+        Identity identity = identityMapper.toEntity(createRequestDto);
+
+        assertNotNull(identity);
+        assertEquals(createRequestDto.cpf(), identity.getCpf());
+        assertEquals(createRequestDto.password(), identity.getPassword());
+        assertEquals(createRequestDto.email(), identity.getEmail());
     }
 
 }

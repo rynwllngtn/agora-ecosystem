@@ -5,18 +5,26 @@ import dev.rynwllngtn.identity.application.dto.IdentityResponseDto;
 import dev.rynwllngtn.identity.application.dto.IdentityUpdateEmailRequestDto;
 import dev.rynwllngtn.identity.application.dto.IdentityUpdatePasswordRequestDto;
 import dev.rynwllngtn.identity.domain.Identity;
+import dev.rynwllngtn.identity.domain.IdentityStatus;
+
+import java.util.UUID;
 
 public class IdentityBuilder {
 
-    public static String defaultCpf = "11111111111";
+    public static String defaultCpf = "94763691082";
     public static String defaultEmail = "test@email.com";
     public static String defaultPassword = "password";
 
     public static String updateEmail = "testNew@email.com";
     public static String updatePassword = "newPassword";
 
+    public static String wrongCpf = "01234567890";
     public static String wrongEmail = "testWrong@email.com";
     public static String wrongPassword = "wrongPassword";
+
+    public static String invalidCpf = "cpf";
+    public static String invalidEmail = "email";
+    public static String invalidPassword = "pass";
 
     private IdentityBuilder() {
     }
@@ -52,7 +60,34 @@ public class IdentityBuilder {
 
     public static class Response {
 
+        private UUID id = UUID.randomUUID();
+        private String email = defaultEmail;
+        private IdentityStatus status = IdentityStatus.ACTIVE;
+
         private Response() {}
+
+        public static Response valid() {
+            return new Response();
+        }
+
+        public Response withId(UUID id) {
+            this.id = id;
+            return this;
+        }
+
+        public Response withEmail(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Response withStatus(IdentityStatus status) {
+            this.status = status;
+            return this;
+        }
+
+        public IdentityResponseDto build() {
+            return new IdentityResponseDto(id, email, status);
+        }
 
         public static IdentityResponseDto fromEntity(Identity identity) {
             return new IdentityResponseDto(
@@ -80,8 +115,13 @@ public class IdentityBuilder {
             return new IdentityCreateRequestDto(cpf, email, password);
         }
 
+        public CreateRequest withInvalidCpf() {
+            this.cpf = invalidCpf;
+            return this;
+        }
+
         public CreateRequest withInvalidEmail() {
-            this.email = wrongEmail;
+            this.email = invalidPassword;
             return this;
         }
 

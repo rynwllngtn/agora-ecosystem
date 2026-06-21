@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 public record IdentityUpdateEmailRequestDto(
         @NotBlank(message = "O email não pode ser vazio")
         @Email(
-                regexp = "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$",
+                regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-z]{2,}$",
                 message = "O email deve ser válido"
         )
         String newEmail,
