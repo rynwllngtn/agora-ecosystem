@@ -1,0 +1,38 @@
+services:
+
+  agora-identity-db:
+    image: postgres:16-alpine
+    container_name: agora-identity-db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: agora-identity
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d agora-identity"]
+      retries: 5
+      start_period: 30s
+      interval: 10s
+      timeout: 5s
+    ports:
+      - "5432:5432"
+    volumes:
+      - "postgres_data:/var/lib/postgresql/data"
+
+  agora-identity:
+    build:
+      context: ..
+      dockerfile: agora-identity/Dockerfile
+    image: agora-identity
+    container_name: agora-identity
+    depends_on:
+      agora-identity-db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://agora-identity-db:5432/agora-identity?currentSchema=identity
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: admin
+
+volumes:
+  postgres_data:

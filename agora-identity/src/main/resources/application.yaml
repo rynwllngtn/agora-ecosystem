@@ -1,13 +1,11 @@
 spring:
   application:
     name: agora-identity
-  config:
-    import: optional:file:agora-identity/.env[.properties]
 
   datasource:
-    url: ${db_url}
-    username: ${db_username}
-    password: ${db_password}
+    url: ${db_url:jdbc:postgresql://agora-identity-db:5432/agora-identity?currentSchema=identity}
+    username: ${db_username:admin}
+    password: ${db_password:admin}
     driver-class-name: org.postgresql.Driver
 
   jpa:
