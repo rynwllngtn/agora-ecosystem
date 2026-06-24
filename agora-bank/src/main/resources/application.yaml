@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: agora-bank
+
+  datasource:
+    url: ${db_url}
+    username: ${db_username}
+    password: ${db_password}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+  flyway:
+    enabled: true
+    default-schema: bank
+    create-schemas: true

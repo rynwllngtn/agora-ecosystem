@@ -12,6 +12,7 @@
     <modules>
         <module>agora-common</module>
         <module>agora-identity</module>
+        <module>agora-bank</module>
     </modules>
 
     <properties>
