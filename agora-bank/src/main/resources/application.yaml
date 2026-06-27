@@ -1,6 +1,8 @@
 spring:
   application:
     name: agora-bank
+  config:
+    import: optional:file:agora-bank/.env[.properties]
 
   datasource:
     url: ${db_url}
