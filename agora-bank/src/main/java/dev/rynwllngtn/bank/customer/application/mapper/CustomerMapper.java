@@ -10,8 +10,8 @@ public class CustomerMapper {
 
     public CustomerResponseDto toResponseDto(Customer customer) {
         return new CustomerResponseDto(customer.getId(),
-                                       customer.getCpf(),
-                                       customer.getEmail());
+                                       customer.getEmail(),
+                                       customer.getStatus());
     }
 
     public Customer toEntity(CustomerCreateRequestDto createRequestDto) {

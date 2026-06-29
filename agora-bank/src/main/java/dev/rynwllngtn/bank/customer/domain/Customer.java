@@ -1,6 +1,6 @@
 package dev.rynwllngtn.bank.customer.domain;
 
-import dev.rynwllngtn.common.domain.TimestampedEntity;
+import dev.rynwllngtn.common.domain.AuditableEntity;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import java.util.UUID;
 @Getter @NoArgsConstructor @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @EntityListeners(value = AuditingEntityListener.class)
 @Entity @Table(name = "customers")
-public class Customer extends TimestampedEntity {
+public class Customer extends AuditableEntity {
 
     @Id @EqualsAndHashCode.Include
     @Column(name = "id", nullable = false, updatable = false)
@@ -37,6 +37,7 @@ public class Customer extends TimestampedEntity {
         this.identityId = identityId;
         this.cpf = cpf;
         this.email = email;
+        status = CustomerStatus.PENDING_REGISTRATION;
     }
 
 }
