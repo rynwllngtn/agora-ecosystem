@@ -23,6 +23,11 @@ public class CustomerBuilder {
         private Entity() {
         }
 
+        private Entity(String cpf, String email) {
+            this.cpf = cpf;
+            this.email = email;
+        }
+
         public static Entity valid() {
             return new Entity();
         }
@@ -31,13 +36,32 @@ public class CustomerBuilder {
             return new Customer(UUID.randomUUID(), cpf, email);
         }
 
+        public static Entity fromCreateRequest(CustomerCreateRequestDto createRequestDto) {
+            return new Entity(createRequestDto.cpf(), createRequestDto.email());
+        }
+
     }
 
     public static class Response {
 
-        private UUID identityId = UUID.randomUUID();
+        private UUID id = UUID.randomUUID();
         private String email = defaultEmail;
         private CustomerStatus status = CustomerStatus.PENDING_REGISTRATION;
+
+        private Response() {}
+
+        public static Response valid() {
+            return new Response();
+        }
+
+        public Response withId(UUID id) {
+            this.id = id;
+            return this;
+        }
+
+        public CustomerResponseDto build() {
+            return new CustomerResponseDto(id, email, status);
+        }
 
         public static CustomerResponseDto fromEntity(Customer customer) {
             return new CustomerResponseDto(
@@ -45,14 +69,6 @@ public class CustomerBuilder {
                     customer.getEmail(),
                     customer.getStatus()
             );
-        }
-
-        public static Response valid() {
-            return new Response();
-        }
-
-        public CustomerResponseDto build() {
-            return new CustomerResponseDto(identityId, email, CustomerStatus.PENDING_REGISTRATION);
         }
 
     }
