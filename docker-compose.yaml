@@ -1,0 +1,52 @@
+services:
+
+  rabbitmq:
+    image: rabbitmq:4.3.2-management
+    container_name: agora-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "check_port_connectivity" ]
+      retries: 5
+      start_period: 30s
+      interval: 10s
+      timeout: 5s
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - agora-network
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: agora-ecosystem-db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: agora-ecosystem-db
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U admin -d agora-ecosystem-db" ]
+      retries: 5
+      start_period: 30s
+      interval: 10s
+      timeout: 5s
+    ports:
+      - "5432:5432"
+    networks:
+      - agora-network
+    volumes:
+      - "postgres_data:/var/lib/postgresql/data"
+      - "./infra/database/init-databases.sql:/docker-entrypoint-initdb.d/init-databases.sql"
+
+#include:
+#  - agora-identity/docker-compose.yaml
+#  - agora-bank/docker-compose.yaml
+
+networks:
+  agora-network:
+    name: agora-network
+    driver: bridge
+
+volumes:
+  postgres_data:
