@@ -3,10 +3,16 @@ spring:
     name: agora-identity
 
   datasource:
-    url: ${db_url:jdbc:postgresql://agora-identity-db:5432/agora-identity?currentSchema=identity}
+    url: ${db_url:jdbc:postgresql://localhost:5432/agora_identity?currentSchema=identity}
     username: ${db_username:admin}
     password: ${db_password:admin}
     driver-class-name: org.postgresql.Driver
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: admin
 
   jpa:
     hibernate:
