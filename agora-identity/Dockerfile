@@ -5,6 +5,7 @@ WORKDIR /app
 COPY pom.xml .
 COPY agora-common/pom.xml ./agora-common/
 COPY agora-identity/pom.xml ./agora-identity/
+COPY agora-bank/pom.xml ./agora-bank/
 
 RUN mvn dependency:go-offline
 

@@ -11,9 +11,13 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://agora-ecosystem-db:5432/agora_identity
+      SPRING_DATASOURCE_URL: jdbc:postgresql://agora-ecosystem-db:5432/agora_identity?currentSchema=identity
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: admin
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: admin
+      SPRING_RABBITMQ_PASSWORD: admin
 
 networks:
   agora-network:

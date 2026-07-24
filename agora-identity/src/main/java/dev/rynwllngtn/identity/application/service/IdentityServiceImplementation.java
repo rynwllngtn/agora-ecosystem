@@ -1,5 +1,7 @@
 package dev.rynwllngtn.identity.application.service;
 
+import dev.rynwllngtn.common.event.identity.IdentityCreatedEvent;
+import dev.rynwllngtn.common.event.identity.IdentityEmailUpdatedEvent;
 import dev.rynwllngtn.identity.application.dto.IdentityCreateRequestDto;
 import dev.rynwllngtn.identity.application.dto.IdentityResponseDto;
 import dev.rynwllngtn.identity.application.dto.IdentityUpdateEmailRequestDto;
@@ -8,6 +10,7 @@ import dev.rynwllngtn.identity.application.exception.DuplicateResourceException;
 import dev.rynwllngtn.identity.application.exception.ResourceNotFoundException;
 import dev.rynwllngtn.identity.application.exception.WrongPasswordException;
 import dev.rynwllngtn.identity.application.mapper.IdentityMapper;
+import dev.rynwllngtn.identity.application.producer.IdentityEventProducer;
 import dev.rynwllngtn.identity.domain.Identity;
 import dev.rynwllngtn.identity.domain.IdentityRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +26,7 @@ public class IdentityServiceImplementation implements IdentityService {
 
     private final IdentityRepository identityRepository;
     private final IdentityMapper identityMapper;
+    private final IdentityEventProducer identityEventProducer;
 
     private Identity findByIdOrThrow(UUID id) {
         Optional<Identity> optionalIdentity = identityRepository.findById(id);
@@ -49,6 +53,12 @@ public class IdentityServiceImplementation implements IdentityService {
         }
         Identity identity = identityMapper.toEntity(createRequestDto);
         identity = identityRepository.save(identity);
+        identityEventProducer.identityCreated(
+                new IdentityCreatedEvent(identity.getId(),
+                                         identity.getCpf(),
+                                         identity.getEmail(),
+                                         identity.getCreatedAt())
+        );
         return identityMapper.toResponseDto(identity);
     }
 
@@ -79,6 +89,11 @@ public class IdentityServiceImplementation implements IdentityService {
         }
         identity.changeEmail(updateRequestDto.newEmail());
         identity = identityRepository.save(identity);
+        identityEventProducer.emailUpdated(
+                new IdentityEmailUpdatedEvent(identity.getId(),
+                                              identity.getEmail(),
+                                              identity.getUpdatedAt())
+        );
         return identityMapper.toResponseDto(identity);
     }
 
