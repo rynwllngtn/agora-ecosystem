@@ -1,5 +1,6 @@
 package dev.rynwllngtn.identity.infrastructure.config;
 
+import dev.rynwllngtn.common.messaging.IdentityMessagingConstants;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.support.converter.JacksonJsonMessageConverter;
@@ -11,11 +12,9 @@ import org.springframework.context.annotation.Configuration;
 @EnableRabbit
 public class RabbitMQConfig {
 
-    public static final String EXCHANGE_NAME = "identity.events";
-
     @Bean
-    public TopicExchange directExchange() {
-        return new TopicExchange(EXCHANGE_NAME);
+    public TopicExchange topicExchange() {
+        return new TopicExchange(IdentityMessagingConstants.EXCHANGE_NAME);
     }
 
     @Bean
