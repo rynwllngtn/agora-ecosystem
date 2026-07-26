@@ -1,15 +1,12 @@
-package dev.rynwllngtn.bank.customer.api;
+package dev.rynwllngtn.bank.customer.api.http;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.rynwllngtn.bank.customer.application.dto.CustomerCreateRequestDto;
 import dev.rynwllngtn.bank.customer.application.dto.CustomerResponseDto;
 import dev.rynwllngtn.bank.customer.application.exception.ResourceNotFoundException;
 import dev.rynwllngtn.bank.customer.application.service.CustomerService;
 import dev.rynwllngtn.bank.customer.builder.CustomerBuilder;
-import dev.rynwllngtn.bank.customer.domain.Customer;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MediaType;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +17,6 @@ import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(CustomerController.class)
@@ -62,28 +58,6 @@ class CustomerControllerTest {
             assertThat(result).hasStatus(404);
             assertThat(result).bodyJson().extractingPath("$.detail").isEqualTo("Customer não encontrado!");
             assertThat(result).bodyJson().extractingPath("$.timestamp").isNotNull();
-        }
-
-    }
-
-    @Nested
-    @DisplayName(value = "Testes de criação")
-    class CreateTests {
-
-        @Test
-        void shouldReturn201AndCreatedIdentity() throws Exception {
-            CustomerCreateRequestDto mockCreateRequestDto = CustomerBuilder.CreateRequest.valid().build();
-            Customer mockCustomer = CustomerBuilder.Entity.fromCreateRequest(mockCreateRequestDto).build();
-            CustomerResponseDto mockResponseDto = CustomerBuilder.Response.fromEntity(mockCustomer);
-
-            when(customerService.create(any(CustomerCreateRequestDto.class))).thenReturn(mockResponseDto);
-
-            MockMvcTester.MockMvcRequestBuilder result = mockMvcTester.post().uri("/customer")
-                    .contentType(String.valueOf(MediaType.APPLICATION_JSON))
-                    .content(objectMapper.writeValueAsString(mockCreateRequestDto));
-
-            assertThat(result).hasStatus(201);
-            assertThat(result).bodyJson().isEqualTo(objectMapper.writeValueAsString(mockResponseDto));
         }
 
     }

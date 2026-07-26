@@ -1,6 +1,5 @@
 package dev.rynwllngtn.bank.customer.builder;
 
-import dev.rynwllngtn.bank.customer.application.dto.CustomerCreateRequestDto;
 import dev.rynwllngtn.bank.customer.application.dto.CustomerResponseDto;
 import dev.rynwllngtn.bank.customer.domain.Customer;
 import dev.rynwllngtn.bank.customer.domain.CustomerStatus;
@@ -34,10 +33,6 @@ public class CustomerBuilder {
 
         public Customer build() {
             return new Customer(UUID.randomUUID(), cpf, email);
-        }
-
-        public static Entity fromCreateRequest(CustomerCreateRequestDto createRequestDto) {
-            return new Entity(createRequestDto.cpf(), createRequestDto.email());
         }
 
     }
@@ -81,10 +76,6 @@ public class CustomerBuilder {
 
         public static CreateRequest valid() {
             return new CreateRequest();
-        }
-
-        public CustomerCreateRequestDto build() {
-            return new CustomerCreateRequestDto(UUID.randomUUID(), cpf, email);
         }
 
     }
