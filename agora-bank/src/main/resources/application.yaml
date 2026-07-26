@@ -1,14 +1,21 @@
+server:
+  port: 8090
+
 spring:
   application:
     name: agora-bank
-  config:
-    import: optional:file:agora-bank/.env[.properties]
 
   datasource:
-    url: ${db_url}
-    username: ${db_username}
-    password: ${db_password}
+    url: ${db_url:jdbc:postgresql://localhost:5432/agora_bank?currentSchema=bank}
+    username: ${db_username:admin}
+    password: ${db_password:admin}
     driver-class-name: org.postgresql.Driver
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: admin
 
   jpa:
     hibernate:
