@@ -1,6 +1,5 @@
 package dev.rynwllngtn.bank.customer.application.service;
 
-import dev.rynwllngtn.bank.customer.application.dto.CustomerCreateRequestDto;
 import dev.rynwllngtn.bank.customer.application.dto.CustomerResponseDto;
 import dev.rynwllngtn.bank.customer.application.exception.ResourceNotFoundException;
 import dev.rynwllngtn.bank.customer.application.mapper.CustomerMapper;
@@ -76,26 +75,6 @@ public class CustomerServiceImplementationTest {
     @Nested
     @DisplayName(value = "Testes de criação")
     class CreateTests {
-        @Test
-        void shouldCreateCustomerAndSave() {
-            CustomerCreateRequestDto mockCreateRequestDto = CustomerBuilder.CreateRequest.valid().build();
-            Customer mockCustomer = CustomerBuilder.Entity.valid().build();
-            CustomerResponseDto mockResponseDto = CustomerBuilder.Response.fromEntity(mockCustomer);
-
-            when(customerMapper.toEntity(mockCreateRequestDto)).thenReturn(mockCustomer);
-            when(customerRepository.save(mockCustomer)).thenReturn(mockCustomer);
-            when(customerMapper.toResponseDto(mockCustomer)).thenReturn(mockResponseDto);
-
-            CustomerResponseDto result = customerService.create(mockCreateRequestDto);
-
-            assertNotNull(result);
-            assertEquals(mockResponseDto.id(), result.id());
-            assertEquals(mockResponseDto.email(), result.email());
-
-            verify(customerMapper).toEntity(mockCreateRequestDto);
-            verify(customerRepository).save(mockCustomer);
-            verify(customerMapper).toResponseDto(mockCustomer);
-        }
 
     }
 

@@ -1,6 +1,5 @@
 package dev.rynwllngtn.bank.customer.application.mapper;
 
-import dev.rynwllngtn.bank.customer.application.dto.CustomerCreateRequestDto;
 import dev.rynwllngtn.bank.customer.application.dto.CustomerResponseDto;
 import dev.rynwllngtn.bank.customer.builder.CustomerBuilder;
 import dev.rynwllngtn.bank.customer.domain.Customer;
@@ -26,16 +25,5 @@ public class CustomerMapperTest {
         assertEquals(CustomerStatus.PENDING_REGISTRATION, responseDto.status());
     }
 
-    @Test
-    void shouldMapCustomerCreateRequestDtoToCustomer() {
-        CustomerCreateRequestDto createRequestDto = CustomerBuilder.CreateRequest.valid().build();
-
-        Customer customer = customerMapper.toEntity(createRequestDto);
-
-        assertNotNull(customer);
-        assertEquals(createRequestDto.identityId(), customer.getIdentityId());
-        assertEquals(createRequestDto.cpf(), customer.getCpf());
-        assertEquals(createRequestDto.email(), customer.getEmail());
-    }
 
 }

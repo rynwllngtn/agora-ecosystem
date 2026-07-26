@@ -1,11 +1,12 @@
 package dev.rynwllngtn.bank.customer.application.service;
 
-import dev.rynwllngtn.bank.customer.application.dto.CustomerCreateRequestDto;
 import dev.rynwllngtn.bank.customer.application.dto.CustomerResponseDto;
 import dev.rynwllngtn.bank.customer.application.exception.ResourceNotFoundException;
 import dev.rynwllngtn.bank.customer.application.mapper.CustomerMapper;
 import dev.rynwllngtn.bank.customer.domain.Customer;
 import dev.rynwllngtn.bank.customer.domain.CustomerRepository;
+import dev.rynwllngtn.common.event.identity.IdentityCreatedEvent;
+import dev.rynwllngtn.common.event.identity.IdentityEmailUpdatedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,13 @@ public class CustomerServiceImplementation implements CustomerService {
         );
     }
 
+    private Customer findByIdentityIdOrThrow(UUID identityId) {
+        Optional<Customer> customer = customerRepository.findByIdentityId(identityId);
+        return customer.orElseThrow(
+                () -> new ResourceNotFoundException("Customer não encontrado!")
+        );
+    }
+
     @Override
     @Transactional(readOnly = true)
     public CustomerResponseDto findById(UUID id) {
@@ -36,10 +44,23 @@ public class CustomerServiceImplementation implements CustomerService {
 
     @Override
     @Transactional
-    public CustomerResponseDto create(CustomerCreateRequestDto createRequestDto) {
-        Customer customer = customerMapper.toEntity(createRequestDto);
-        customer = customerRepository.save(customer);
-        return customerMapper.toResponseDto(customer);
+    public void create(IdentityCreatedEvent createdEvent) {
+        if (customerRepository.existsByIdentityId(createdEvent.id())) {
+            return;
+        }
+        Customer customer = customerMapper.toEntity(createdEvent);
+        customerRepository.save(customer);
+    }
+
+    @Override
+    @Transactional
+    public void updateEmail(IdentityEmailUpdatedEvent emailUpdatedEvent) {
+        Customer customer = findByIdentityIdOrThrow(emailUpdatedEvent.id());
+        if (customer.getUpdatedAt().isAfter(emailUpdatedEvent.updatedAt())) {
+            return;
+        }
+        customer.updateEmail(emailUpdatedEvent.email());
+        customerRepository.save(customer);
     }
 
 }
