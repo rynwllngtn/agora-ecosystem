@@ -40,4 +40,8 @@ public class Customer extends AuditableEntity {
         status = CustomerStatus.PENDING_REGISTRATION;
     }
 
+    public void updateEmail(String email) {
+        this.email = email;
+    }
+
 }

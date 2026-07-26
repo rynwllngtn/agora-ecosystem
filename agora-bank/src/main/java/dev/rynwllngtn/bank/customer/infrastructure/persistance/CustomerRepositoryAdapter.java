@@ -20,6 +20,16 @@ public class CustomerRepositoryAdapter implements CustomerRepository {
     }
 
     @Override
+    public Optional<Customer> findByIdentityId(UUID identityId) {
+        return customerRepository.findByIdentityId(identityId);
+    }
+
+    @Override
+    public boolean existsByIdentityId(UUID identityId) {
+        return customerRepository.existsByIdentityId(identityId);
+    }
+
+    @Override
     public Customer save(Customer customer) {
         return customerRepository.save(customer);
     }
