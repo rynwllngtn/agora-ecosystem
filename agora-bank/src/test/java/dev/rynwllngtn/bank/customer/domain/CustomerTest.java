@@ -24,7 +24,6 @@ public class CustomerTest {
     @Nested
     @DisplayName(value = "Testes de inicialização")
     class InitializationTest {
-
         @Test
         void shouldInitializeValidCustomer() {
             assertNotNull(mockCustomer);
@@ -48,7 +47,21 @@ public class CustomerTest {
             assertEquals(CustomerBuilder.defaultCpf, mockCustomer.getCpf());
             assertEquals(CustomerStatus.PENDING_REGISTRATION, mockCustomer.getStatus());
         }
+    }
 
+    @Nested
+    @DisplayName(value = "Testes de métodos")
+    class MethodsTest {
+        @Test
+        void shouldUpdateEmailField() {
+            assertNotNull(mockCustomer);
+            assertNotNull(mockCustomer.getId());
+
+            String newEmail = "";
+            mockCustomer.updateEmail(newEmail);
+
+            assertEquals(newEmail, mockCustomer.getEmail());
+        }
     }
 
 }
