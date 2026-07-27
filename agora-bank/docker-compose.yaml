@@ -1,0 +1,24 @@
+services:
+
+  agora-bank:
+    build:
+      context: ..
+      dockerfile: agora-bank/Dockerfile
+    networks:
+      - agora-network
+    image: agora-bank
+    container_name: agora-bank
+    ports:
+      - "8090:8090"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://agora-ecosystem-db:5432/agora_bank?currentSchema=bank
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: admin
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: admin
+      SPRING_RABBITMQ_PASSWORD: admin
+
+networks:
+  agora-network:
+    external: true
