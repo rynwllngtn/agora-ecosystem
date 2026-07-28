@@ -14,7 +14,7 @@ services:
       rabbitmq:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://agora-ecosystem-db:5432/agora_bank?currentSchema=bank
+      SPRING_DATASOURCE_URL: jdbc:postgresql://agora-postgres-db:5432/agora_bank?currentSchema=bank
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: admin
       SPRING_RABBITMQ_HOST: rabbitmq

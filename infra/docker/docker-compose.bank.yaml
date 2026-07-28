@@ -1,0 +1,5 @@
+name: agora-ecosystem
+
+include:
+  - docker-compose.system.yaml
+  - ../../agora-bank/docker-compose.yaml
