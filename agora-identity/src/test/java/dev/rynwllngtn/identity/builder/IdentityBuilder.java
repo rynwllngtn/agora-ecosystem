@@ -1,5 +1,7 @@
 package dev.rynwllngtn.identity.builder;
 
+import dev.rynwllngtn.common.event.identity.IdentityCreatedEvent;
+import dev.rynwllngtn.common.event.identity.IdentityEmailUpdatedEvent;
 import dev.rynwllngtn.identity.application.dto.IdentityCreateRequestDto;
 import dev.rynwllngtn.identity.application.dto.IdentityResponseDto;
 import dev.rynwllngtn.identity.application.dto.IdentityUpdateEmailRequestDto;
@@ -7,6 +9,7 @@ import dev.rynwllngtn.identity.application.dto.IdentityUpdatePasswordRequestDto;
 import dev.rynwllngtn.identity.domain.Identity;
 import dev.rynwllngtn.identity.domain.IdentityStatus;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class IdentityBuilder {
@@ -25,6 +28,8 @@ public class IdentityBuilder {
     public static String invalidCpf = "cpf";
     public static String invalidEmail = "email";
     public static String invalidPassword = "pass";
+
+    public static UUID defaultId = UUID.randomUUID();
 
     private IdentityBuilder() {
     }
@@ -172,6 +177,41 @@ public class IdentityBuilder {
         public UpdateEmailRequest withWrongPassword() {
             this.password = wrongPassword;
             return this;
+        }
+
+    }
+
+    public static class CreateEvent {
+
+        private UUID identityId = defaultId;
+        private String cpf = defaultCpf;
+        private String email = defaultEmail;
+
+        private CreateEvent() {}
+
+        public static CreateEvent valid() {
+            return new CreateEvent();
+        }
+
+        public IdentityCreatedEvent build() {
+            return new IdentityCreatedEvent(identityId, cpf, email, LocalDateTime.now());
+        }
+
+    }
+
+    public static class UpdatedEmailEvent {
+
+        private UUID identityId = defaultId;
+        private String email = updateEmail;
+
+        private UpdatedEmailEvent() {}
+
+        public static UpdatedEmailEvent valid() {
+            return new UpdatedEmailEvent();
+        }
+
+        public IdentityEmailUpdatedEvent build() {
+            return new IdentityEmailUpdatedEvent(identityId, email, LocalDateTime.now());
         }
 
     }

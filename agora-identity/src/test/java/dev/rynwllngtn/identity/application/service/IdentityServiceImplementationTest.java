@@ -1,5 +1,7 @@
 package dev.rynwllngtn.identity.application.service;
 
+import dev.rynwllngtn.common.event.identity.IdentityCreatedEvent;
+import dev.rynwllngtn.common.event.identity.IdentityEmailUpdatedEvent;
 import dev.rynwllngtn.identity.application.dto.IdentityCreateRequestDto;
 import dev.rynwllngtn.identity.application.dto.IdentityResponseDto;
 import dev.rynwllngtn.identity.application.dto.IdentityUpdateEmailRequestDto;
@@ -8,6 +10,7 @@ import dev.rynwllngtn.identity.application.exception.DuplicateResourceException;
 import dev.rynwllngtn.identity.application.exception.ResourceNotFoundException;
 import dev.rynwllngtn.identity.application.exception.WrongPasswordException;
 import dev.rynwllngtn.identity.application.mapper.IdentityMapper;
+import dev.rynwllngtn.identity.application.producer.IdentityEventProducer;
 import dev.rynwllngtn.identity.builder.IdentityBuilder;
 import dev.rynwllngtn.identity.domain.Identity;
 import dev.rynwllngtn.identity.domain.IdentityRepository;
@@ -16,6 +19,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -34,6 +38,9 @@ public class IdentityServiceImplementationTest {
 
     @Mock
     private IdentityMapper identityMapper;
+
+    @Mock
+    private IdentityEventProducer identityEventProducer;
 
     @InjectMocks
     private IdentityServiceImplementation identityService;
@@ -100,6 +107,14 @@ public class IdentityServiceImplementationTest {
             verify(identityRepository).save(mockIdentity);
             verify(identityMapper).toEntity(mockCreateRequestDto);
             verify(identityMapper).toResponseDto(mockIdentity);
+
+            ArgumentCaptor<IdentityCreatedEvent> eventCaptor = ArgumentCaptor.forClass(IdentityCreatedEvent.class);
+            verify(identityEventProducer).identityCreated(eventCaptor.capture());
+
+            IdentityCreatedEvent publishedEvent = eventCaptor.getValue();
+            assertEquals(mockIdentity.getId(), publishedEvent.id());
+            assertEquals(mockIdentity.getCpf(), publishedEvent.cpf());
+            assertEquals(mockIdentity.getEmail(), publishedEvent.email());
         }
 
         @Test
@@ -112,6 +127,7 @@ public class IdentityServiceImplementationTest {
             );
 
             verify(identityRepository).existsByCpf(mockCreateRequestDto.cpf());
+            verify(identityEventProducer, never()).identityCreated(any());
         }
 
         @Test
@@ -124,6 +140,7 @@ public class IdentityServiceImplementationTest {
             );
 
             verify(identityRepository).existsByEmail(mockCreateRequestDto.email());
+            verify(identityEventProducer, never()).identityCreated(any());
         }
 
     }
@@ -149,6 +166,13 @@ public class IdentityServiceImplementationTest {
             verify(identityRepository).findById(id);
             verify(identityRepository).existsByEmail(mockUpdateRequestDto.newEmail());
             verify(identityRepository).save(mockIdentity);
+
+            ArgumentCaptor<IdentityEmailUpdatedEvent> eventCaptor = ArgumentCaptor.forClass(IdentityEmailUpdatedEvent.class);
+            verify(identityEventProducer).emailUpdated(eventCaptor.capture());
+
+            IdentityEmailUpdatedEvent publishedEvent = eventCaptor.getValue();
+            assertEquals(mockIdentity.getId(), publishedEvent.id());
+            assertEquals(mockIdentity.getEmail(), publishedEvent.email());
         }
 
         @Test
@@ -162,6 +186,7 @@ public class IdentityServiceImplementationTest {
             );
 
             verify(identityRepository).existsByEmail(mockUpdateRequestDto.newEmail());
+            verify(identityEventProducer, never()).emailUpdated(any());
         }
 
         @Test
@@ -177,6 +202,7 @@ public class IdentityServiceImplementationTest {
             );
 
             verify(identityRepository, never()).save(any(Identity.class));
+            verify(identityEventProducer, never()).emailUpdated(any());
         }
 
     }
@@ -195,8 +221,6 @@ public class IdentityServiceImplementationTest {
             when(identityRepository.save(any(Identity.class))).thenReturn(mockIdentity);
 
             identityService.changePassword(id, mockUpdateRequestDto);
-
-            IO.println(mockIdentity.toString());
 
             assertEquals(IdentityBuilder.updatePassword, mockIdentity.getPassword());
 
