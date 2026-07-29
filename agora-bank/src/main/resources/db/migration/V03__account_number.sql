@@ -1,0 +1,3 @@
+CREATE SEQUENCE account_number_seq
+    START WITH 10000000
+    INCREMENT BY 1;

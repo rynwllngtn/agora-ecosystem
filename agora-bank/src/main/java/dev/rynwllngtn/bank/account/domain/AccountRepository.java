@@ -7,6 +7,8 @@ public interface AccountRepository {
 
     Optional<Account> findById(UUID id);
 
+    Long nextAccountNumberFromSequence();
+
     Account save(Account account);
 
 }

@@ -20,6 +20,11 @@ public class AccountRepositoryAdapter implements AccountRepository {
     }
 
     @Override
+    public Long nextAccountNumberFromSequence() {
+        return accountRepository.nextAccountNumberFromSequence();
+    }
+
+    @Override
     public Account save(Account account) {
         return accountRepository.save(account);
     }
