@@ -1,7 +1,7 @@
 package dev.rynwllngtn.bank.customer.application.service;
 
 import dev.rynwllngtn.bank.customer.application.dto.CustomerResponseDto;
-import dev.rynwllngtn.bank.customer.application.exception.ResourceNotFoundException;
+import dev.rynwllngtn.bank.shared.application.exception.ResourceNotFoundException;
 import dev.rynwllngtn.bank.customer.application.mapper.CustomerMapper;
 import dev.rynwllngtn.bank.customer.domain.Customer;
 import dev.rynwllngtn.bank.customer.domain.CustomerRepository;

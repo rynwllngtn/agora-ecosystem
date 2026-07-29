@@ -1,6 +1,6 @@
-package dev.rynwllngtn.bank.customer.infrastructure.handler;
+package dev.rynwllngtn.bank.shared.infrastructure.handler;
 
-import dev.rynwllngtn.bank.customer.application.exception.ResourceNotFoundException;
+import dev.rynwllngtn.bank.shared.application.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;
