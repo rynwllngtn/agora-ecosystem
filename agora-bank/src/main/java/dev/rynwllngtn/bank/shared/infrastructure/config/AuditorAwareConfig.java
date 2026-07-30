@@ -1,4 +1,4 @@
-package dev.rynwllngtn.bank.customer.infrastructure.config;
+package dev.rynwllngtn.bank.shared.infrastructure.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;

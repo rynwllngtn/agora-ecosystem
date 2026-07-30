@@ -1,4 +1,4 @@
-package dev.rynwllngtn.bank.customer.infrastructure.config;
+package dev.rynwllngtn.bank.shared.infrastructure.config;
 
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;

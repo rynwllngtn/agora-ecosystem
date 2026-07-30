@@ -1,4 +1,4 @@
-package dev.rynwllngtn.bank.customer.application.exception;
+package dev.rynwllngtn.bank.shared.application.exception;
 
 import dev.rynwllngtn.common.exception.DomainException;
 

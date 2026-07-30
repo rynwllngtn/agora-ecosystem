@@ -1,4 +1,4 @@
-package dev.rynwllngtn.bank.customer.infrastructure.config;
+package dev.rynwllngtn.bank.shared.infrastructure.config;
 
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.support.converter.JacksonJsonMessageConverter;

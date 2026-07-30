@@ -1,4 +1,4 @@
-package dev.rynwllngtn.bank.customer.infrastructure.handler;
+package dev.rynwllngtn.bank.shared.infrastructure.handler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;

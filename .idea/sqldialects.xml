@@ -2,6 +2,8 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/agora-bank/src/main/resources/db/migration/V01__create_customer.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/agora-bank/src/main/resources/db/migration/V02__create_account.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/agora-bank/src/main/resources/db/migration/V03__account_number.sql" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/agora-identity/src/main/resources/db/migration/V01__create_table.sql" dialect="GenericSQL" />
   </component>
 </project>

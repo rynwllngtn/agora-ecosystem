@@ -3,7 +3,7 @@ package dev.rynwllngtn.bank.customer.api.http;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.rynwllngtn.bank.customer.application.dto.CustomerResponseDto;
-import dev.rynwllngtn.bank.customer.application.exception.ResourceNotFoundException;
+import dev.rynwllngtn.bank.shared.application.exception.ResourceNotFoundException;
 import dev.rynwllngtn.bank.customer.application.service.CustomerService;
 import dev.rynwllngtn.bank.customer.builder.CustomerBuilder;
 import org.junit.jupiter.api.DisplayName;
