@@ -21,7 +21,9 @@ public class AccountMapperTest {
         assertNotNull(responseDto);
         assertEquals(account.getId(), responseDto.id());
         assertEquals(account.getCustomerId(), responseDto.customerId());
-        assertEquals(account.getDetails(), responseDto.details());
+        assertEquals(account.getDetails().agency(), responseDto.agency());
+        assertEquals(account.getDetails().number(), responseDto.number());
+        assertEquals(account.getDetails().bankCode(), responseDto.bankCode());
         assertEquals(account.getStatus(), responseDto.status());
         assertEquals(account.getBalance(), responseDto.balance());
     }

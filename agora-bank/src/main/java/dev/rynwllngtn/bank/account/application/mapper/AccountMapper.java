@@ -10,7 +10,9 @@ public class AccountMapper {
     public AccountResponseDto toResponseDto(Account account) {
         return new AccountResponseDto(account.getId(),
                                       account.getCustomerId(),
-                                      account.getDetails(),
+                                      account.getDetails().agency(),
+                                      account.getDetails().number(),
+                                      account.getDetails().bankCode(),
                                       account.getStatus(),
                                       account.getBalance());
     }

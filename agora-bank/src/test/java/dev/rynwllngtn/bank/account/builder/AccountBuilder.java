@@ -38,7 +38,9 @@ public class AccountBuilder {
 
         private UUID id = UUID.randomUUID();
         private UUID customerId = defaultCustomerId;
-        private AccountDetails details = new AccountDetails(defaultAccountNumber);
+        private String agency = "001";
+        private String number = defaultAccountNumber;
+        private String bankCode = "1234";
         private AccountStatus status = AccountStatus.ACTIVE;
         private BigDecimal balance = BigDecimal.ZERO;
 
@@ -54,14 +56,16 @@ public class AccountBuilder {
         }
 
         public AccountResponseDto build() {
-            return new AccountResponseDto(id, customerId, details, status, balance);
+            return new AccountResponseDto(id, customerId, agency, number, bankCode , status, balance);
         }
 
         public static AccountResponseDto fromEntity(Account account) {
             return new AccountResponseDto(
                     account.getId(),
                     account.getCustomerId(),
-                    account.getDetails(),
+                    account.getDetails().agency(),
+                    account.getDetails().number(),
+                    account.getDetails().bankCode(),
                     account.getStatus(),
                     account.getBalance()
             );
