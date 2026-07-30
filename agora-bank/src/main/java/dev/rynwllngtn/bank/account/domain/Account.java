@@ -47,7 +47,7 @@ public class Account extends AuditableEntity {
         this.status = AccountStatus.ACTIVE;
     }
 
-    public void inactivate() {
+    public void deactivate() {
         this.status = AccountStatus.INACTIVE;
     }
 

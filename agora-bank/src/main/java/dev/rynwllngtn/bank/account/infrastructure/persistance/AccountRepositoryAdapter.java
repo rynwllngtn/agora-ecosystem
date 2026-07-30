@@ -20,6 +20,11 @@ public class AccountRepositoryAdapter implements AccountRepository {
     }
 
     @Override
+    public boolean existsByCustomerId(UUID customerId) {
+        return accountRepository.existsByCustomerId(customerId);
+    }
+
+    @Override
     public Long nextAccountNumberFromSequence() {
         return accountRepository.nextAccountNumberFromSequence();
     }

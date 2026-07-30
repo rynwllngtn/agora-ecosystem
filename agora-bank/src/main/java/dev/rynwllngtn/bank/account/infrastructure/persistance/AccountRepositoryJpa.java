@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.UUID;
 
 public interface AccountRepositoryJpa extends JpaRepository<Account, UUID> {
+    boolean existsByCustomerId(UUID customerId);
+
     @Query(value = "SELECT nextval('account_number_seq')", nativeQuery = true)
     Long nextAccountNumberFromSequence();
 }

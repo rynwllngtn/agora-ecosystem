@@ -43,6 +43,9 @@ public class AccountServiceImplementation implements AccountService {
     @Override
     @Transactional
     public void create(UUID customerId) {
+        if (accountRepository.existsByCustomerId(customerId)) {
+            return;
+        }
         Account account = new Account(customerId, newAccountDetails());
         accountRepository.save(account);
     }
@@ -58,9 +61,9 @@ public class AccountServiceImplementation implements AccountService {
 
     @Override
     @Transactional
-    public AccountResponseDto inactivate(UUID id) {
+    public AccountResponseDto deactivate(UUID id) {
         Account account = findByIdOrThrow(id);
-        account.inactivate();
+        account.deactivate();
         accountRepository.save(account);
         return accountMapper.toResponseDto(account);
     }

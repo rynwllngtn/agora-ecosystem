@@ -11,7 +11,7 @@ public interface AccountService {
     void create(UUID customerId);
 
     AccountResponseDto activate(UUID id);
-    AccountResponseDto inactivate(UUID id);
+    AccountResponseDto deactivate(UUID id);
     AccountResponseDto suspend(UUID id);
 
 }

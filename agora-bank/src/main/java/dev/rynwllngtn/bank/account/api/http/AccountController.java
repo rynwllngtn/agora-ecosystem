@@ -28,7 +28,7 @@ public class AccountController implements AccountAPI {
 
     @Override
     public ResponseEntity<AccountResponseDto> deactivate(UUID id) {
-        AccountResponseDto responseDto = accountService.inactivate(id);
+        AccountResponseDto responseDto = accountService.deactivate(id);
         return ResponseEntity.ok().body(responseDto);
     }
 
