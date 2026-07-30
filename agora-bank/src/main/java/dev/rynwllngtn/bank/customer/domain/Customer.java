@@ -44,4 +44,8 @@ public class Customer extends AuditableEntity {
         this.email = email;
     }
 
+    public void completeRegistration() {
+        status = CustomerStatus.REGISTERED;
+    }
+
 }

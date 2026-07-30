@@ -11,6 +11,8 @@ public interface CustomerService {
     CustomerResponseDto findById(UUID id);
 
     void create(IdentityCreatedEvent createdEvent);
+    CustomerResponseDto completeRegistration(UUID id);
+
     void updateEmail(IdentityEmailUpdatedEvent emailUpdatedEvent);
 
 }
