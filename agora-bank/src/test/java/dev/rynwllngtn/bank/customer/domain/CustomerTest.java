@@ -57,10 +57,19 @@ public class CustomerTest {
             assertNotNull(mockCustomer);
             assertNotNull(mockCustomer.getId());
 
-            String newEmail = "";
+            String newEmail = "email@example.com";
             mockCustomer.updateEmail(newEmail);
 
             assertEquals(newEmail, mockCustomer.getEmail());
+        }
+        @Test
+        void shouldUpdateStatusField() {
+            assertNotNull(mockCustomer);
+            assertNotNull(mockCustomer.getId());
+
+            mockCustomer.completeRegistration();
+
+            assertEquals(CustomerStatus.REGISTERED, mockCustomer.getStatus());
         }
     }
 
