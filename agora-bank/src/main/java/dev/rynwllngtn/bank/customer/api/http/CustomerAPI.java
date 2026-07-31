@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -42,6 +43,34 @@ public interface CustomerAPI {
     default ResponseEntity<CustomerResponseDto> findById(
             @Parameter(
                     description = "ID do Customer para busca",
+                    required = true
+            )
+            @PathVariable(value = "id") UUID id) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Operation(
+            summary = "Rota para finalização de cadastro de Customer pelo ID",
+            operationId = "completeRegistration"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Customer com cadastro finalizado",
+            content = @Content(
+                    schema = @Schema(
+                            implementation = CustomerResponseDto.class
+                    )
+            )
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "Customer não encontrado no banco de dados",
+            content = @Content
+    )
+    @PatchMapping(value = "/{id}/complete-registration", produces = "application/json")
+    default ResponseEntity<CustomerResponseDto> completeRegistration(
+            @Parameter(
+                    description = "ID do Customer para finalização de cadastro",
                     required = true
             )
             @PathVariable(value = "id") UUID id) {

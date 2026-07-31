@@ -27,6 +27,7 @@ public class CustomerBuilder {
         private UUID identityId = defaultIdentityId;
         private String cpf = defaultCpf;
         private String email = defaultEmail;
+        private boolean registered = false;
 
         private Entity() {
         }
@@ -35,8 +36,17 @@ public class CustomerBuilder {
             return new Entity();
         }
 
+        public Entity registered() {
+            this.registered = true;
+            return this;
+        }
+
         public Customer build() {
-            return new Customer(identityId, cpf, email);
+            Customer customer = new Customer(identityId, cpf, email);
+            if (registered) {
+                customer.completeRegistration();
+            }
+            return customer;
         }
 
     }

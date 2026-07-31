@@ -1,6 +1,8 @@
 package dev.rynwllngtn.bank.customer.application.service;
 
 import dev.rynwllngtn.bank.customer.application.dto.CustomerResponseDto;
+import dev.rynwllngtn.bank.customer.domain.CustomerStatus;
+import dev.rynwllngtn.bank.shared.application.event.CustomerRegisteredEvent;
 import dev.rynwllngtn.bank.shared.application.exception.ResourceNotFoundException;
 import dev.rynwllngtn.bank.customer.application.mapper.CustomerMapper;
 import dev.rynwllngtn.bank.customer.domain.Customer;
@@ -8,6 +10,7 @@ import dev.rynwllngtn.bank.customer.domain.CustomerRepository;
 import dev.rynwllngtn.common.event.identity.IdentityCreatedEvent;
 import dev.rynwllngtn.common.event.identity.IdentityEmailUpdatedEvent;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +20,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Service
 public class CustomerServiceImplementation implements CustomerService {
+
+    private final ApplicationEventPublisher eventPublisher;
 
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
@@ -50,6 +55,19 @@ public class CustomerServiceImplementation implements CustomerService {
         }
         Customer customer = customerMapper.toEntity(createdEvent);
         customerRepository.save(customer);
+    }
+
+    @Override
+    @Transactional
+    public CustomerResponseDto completeRegistration(UUID id) {
+        Customer customer = findByIdOrThrow(id);
+        if (customer.getStatus() == CustomerStatus.REGISTERED) {
+            return customerMapper.toResponseDto(customer);
+        }
+        customer.completeRegistration();
+        customerRepository.save(customer);
+        eventPublisher.publishEvent(new CustomerRegisteredEvent(customer.getId()));
+        return customerMapper.toResponseDto(customer);
     }
 
     @Override

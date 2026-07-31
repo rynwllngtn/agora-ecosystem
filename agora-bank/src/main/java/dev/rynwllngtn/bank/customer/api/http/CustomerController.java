@@ -20,4 +20,10 @@ public class CustomerController implements CustomerAPI {
         return ResponseEntity.ok().body(responseDto);
     }
 
+    @Override
+    public ResponseEntity<CustomerResponseDto> completeRegistration(UUID id) {
+        CustomerResponseDto responseDto = customerService.completeRegistration(id);
+        return ResponseEntity.ok().body(responseDto);
+    }
+
 }

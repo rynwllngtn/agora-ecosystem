@@ -1,6 +1,7 @@
 package dev.rynwllngtn.bank.customer.application.service;
 
 import dev.rynwllngtn.bank.customer.application.dto.CustomerResponseDto;
+import dev.rynwllngtn.bank.shared.application.event.CustomerRegisteredEvent;
 import dev.rynwllngtn.bank.shared.application.exception.ResourceNotFoundException;
 import dev.rynwllngtn.bank.customer.application.mapper.CustomerMapper;
 import dev.rynwllngtn.bank.customer.builder.CustomerBuilder;
@@ -12,9 +13,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -26,6 +30,9 @@ import static org.mockito.Mockito.*;
 public class CustomerServiceImplementationTest {
 
     @Mock
+    private ApplicationEventPublisher eventPublisher;
+
+    @Mock
     private CustomerRepository customerRepository;
 
     @Mock
@@ -33,6 +40,9 @@ public class CustomerServiceImplementationTest {
 
     @InjectMocks
     private CustomerServiceImplementation customerService;
+
+    @Captor
+    private ArgumentCaptor<CustomerRegisteredEvent> eventCaptor;
 
     @Nested
     @DisplayName(value = "Testes de busca por ID")
@@ -103,6 +113,59 @@ public class CustomerServiceImplementationTest {
 
             verify(customerRepository).existsByIdentityId(identityId);
             verify(customerMapper, never()).toEntity(any());
+            verify(customerRepository, never()).save(any());
+        }
+
+    }
+
+    @Nested
+    @DisplayName(value = "Teste de finalização de registro")
+    class RegistrationTests {
+
+        @Test
+        void shouldCompleteRegistration() {
+            Customer mockCustomer = CustomerBuilder.Entity.valid().build();
+            CustomerResponseDto responseDto = CustomerBuilder.Response.fromEntity(mockCustomer);
+            UUID id = mockCustomer.getId();
+
+            when(customerRepository.findById(id)).thenReturn(Optional.of(mockCustomer));
+            when(customerMapper.toResponseDto(mockCustomer)).thenReturn(responseDto);
+
+            customerService.completeRegistration(id);
+
+            verify(customerRepository).save(mockCustomer);
+            verify(eventPublisher).publishEvent(eventCaptor.capture());
+
+            CustomerRegisteredEvent registeredEvent = eventCaptor.getValue();
+
+            assertEquals(mockCustomer.getId(), registeredEvent.customerId());
+        }
+
+        @Test
+        void shouldReturnAlreadyRegisteredCustomer() {
+            Customer mockCustomer = CustomerBuilder.Entity.valid().registered().build();
+            CustomerResponseDto responseDto = CustomerBuilder.Response.fromEntity(mockCustomer);
+            UUID id = mockCustomer.getId();
+
+            when(customerRepository.findById(id)).thenReturn(Optional.of(mockCustomer));
+            when(customerMapper.toResponseDto(mockCustomer)).thenReturn(responseDto);
+
+            customerService.completeRegistration(id);
+
+            verify(customerRepository, never()).save(any());
+            verify(eventPublisher, never()).publishEvent(any());
+        }
+
+        @Test
+        void shouldThrowResourceNotFound() {
+            UUID id = UUID.randomUUID();
+
+            when(customerRepository.findById(id)).thenReturn(Optional.empty());
+
+            assertThrows(ResourceNotFoundException.class, () -> {
+                customerService.completeRegistration(id);
+            });
+
             verify(customerRepository, never()).save(any());
         }
 

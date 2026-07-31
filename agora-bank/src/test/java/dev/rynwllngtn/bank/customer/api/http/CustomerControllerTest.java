@@ -62,4 +62,36 @@ class CustomerControllerTest {
 
     }
 
+    @Nested
+    @DisplayName(value = "Teste de finalização de registro")
+    class RegistrationTests {
+
+        @Test
+        void shouldReturn200AndIdentityResponseDto() throws JsonProcessingException {
+            UUID id = UUID.randomUUID();
+            CustomerResponseDto mockResponseDto = CustomerBuilder.Response.valid().withId(id).build();
+
+            when(customerService.completeRegistration(id)).thenReturn(mockResponseDto);
+
+            MockMvcTester.MockMvcRequestBuilder result = mockMvcTester.patch().uri("/customer/{id}/complete-registration", id);
+
+            assertThat(result).hasStatusOk();
+            assertThat(result).bodyJson().isEqualTo(objectMapper.writeValueAsString(mockResponseDto));
+        }
+
+        @Test
+        void shouldReturn404WhenCustomerDoesNotExist() {
+            UUID id = UUID.randomUUID();
+
+            when(customerService.completeRegistration(id)).thenThrow(new ResourceNotFoundException("Customer não encontrado!"));
+
+            MockMvcTester.MockMvcRequestBuilder result = mockMvcTester.patch().uri("/customer/{id}/complete-registration", id);
+
+            assertThat(result).hasStatus(404);
+            assertThat(result).bodyJson().extractingPath("$.detail").isEqualTo("Customer não encontrado!");
+            assertThat(result).bodyJson().extractingPath("$.timestamp").isNotNull();
+        }
+
+    }
+
 }
