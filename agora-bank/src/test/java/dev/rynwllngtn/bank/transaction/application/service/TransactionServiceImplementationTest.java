@@ -11,14 +11,18 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -33,6 +37,9 @@ public class TransactionServiceImplementationTest {
 
     @InjectMocks
     private TransactionServiceImplementation transactionService;
+
+    @Captor
+    private ArgumentCaptor<Transaction> transactionCaptor;
 
     @Nested
     @DisplayName(value = "Testes de busca por ID")
@@ -70,6 +77,72 @@ public class TransactionServiceImplementationTest {
             });
 
             verify(transactionRepository).findById(nonExistentId);
+        }
+
+    }
+
+    @Nested
+    @DisplayName(value = "Testes de débito")
+    class DebitTests {
+
+        @Test
+        void shouldCreateAndSaveDebitTransactionSuccessfully() {
+            UUID accountId = TransactionBuilder.defaultAccountId;
+            UUID correlationId = TransactionBuilder.defaultCorrelationId;
+            BigDecimal amount = TransactionBuilder.defaultAmount;
+
+            TransactionResponseDto expectedResponseDto = TransactionBuilder.Response.validOfType(TransactionType.DEBIT).build();
+
+            when(transactionMapper.toResponseDto(any(Transaction.class))).thenReturn(expectedResponseDto);
+
+            TransactionResponseDto result = transactionService.debit(accountId, correlationId, amount);
+
+            assertNotNull(result);
+            assertEquals(expectedResponseDto, result);
+
+            verify(transactionRepository).save(transactionCaptor.capture());
+            Transaction savedTransaction = transactionCaptor.getValue();
+
+            assertNotNull(savedTransaction.getId());
+            assertEquals(accountId, savedTransaction.getAccountId());
+            assertEquals(correlationId, savedTransaction.getCorrelationId());
+            assertEquals(amount, savedTransaction.getAmount());
+            assertEquals(TransactionType.DEBIT, savedTransaction.getType());
+
+            verify(transactionMapper).toResponseDto(savedTransaction);
+        }
+
+    }
+
+    @Nested
+    @DisplayName(value = "Testes de crédito")
+    class CreditTests {
+
+        @Test
+        void shouldCreateAndSaveCreditTransactionSuccessfully() {
+            UUID accountId = TransactionBuilder.defaultAccountId;
+            UUID correlationId = TransactionBuilder.defaultCorrelationId;
+            BigDecimal amount = TransactionBuilder.defaultAmount;
+
+            TransactionResponseDto expectedResponseDto = TransactionBuilder.Response.validOfType(TransactionType.CREDIT).build();
+
+            when(transactionMapper.toResponseDto(any(Transaction.class))).thenReturn(expectedResponseDto);
+
+            TransactionResponseDto result = transactionService.credit(accountId, correlationId, amount);
+
+            assertNotNull(result);
+            assertEquals(expectedResponseDto, result);
+
+            verify(transactionRepository).save(transactionCaptor.capture());
+            Transaction savedTransaction = transactionCaptor.getValue();
+
+            assertNotNull(savedTransaction.getId());
+            assertEquals(accountId, savedTransaction.getAccountId());
+            assertEquals(correlationId, savedTransaction.getCorrelationId());
+            assertEquals(amount, savedTransaction.getAmount());
+            assertEquals(TransactionType.CREDIT, savedTransaction.getType());
+
+            verify(transactionMapper).toResponseDto(savedTransaction);
         }
 
     }

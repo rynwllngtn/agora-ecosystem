@@ -14,7 +14,7 @@ public class TransactionMapperTest {
     private final TransactionMapper transactionMapper = new TransactionMapper();
 
     @Test
-    void shouldMapCustomerToCustomerResponseDto() {
+    void shouldMapTransactionToTransactionResponseDto() {
         Transaction transaction = TransactionBuilder.Entity.validOfType(TransactionType.CREDIT).build();
 
         TransactionResponseDto responseDto = transactionMapper.toResponseDto(transaction);
