@@ -7,6 +7,7 @@ import dev.rynwllngtn.bank.transaction.domain.Transaction;
 import dev.rynwllngtn.bank.transaction.domain.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -27,27 +28,30 @@ public class TransactionServiceImplementation implements TransactionService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public TransactionResponseDto findById(UUID id) {
         Transaction transaction = findByIdOrThrow(id);
         return transactionMapper.toResponseDto(transaction);
     }
 
     @Override
-    public void debit(UUID accountId, BigDecimal amount) {
-        UUID correlationId = UUID.randomUUID();
+    @Transactional
+    public TransactionResponseDto debit(UUID accountId, UUID correlationId, BigDecimal amount) {
         Transaction transaction = Transaction.getDebitInstance(
                 accountId, correlationId, amount
         );
         transactionRepository.save(transaction);
+        return transactionMapper.toResponseDto(transaction);
     }
 
     @Override
-    public void credit(UUID accountId, BigDecimal amount) {
-        UUID correlationId = UUID.randomUUID();
+    @Transactional
+    public TransactionResponseDto credit(UUID accountId, UUID correlationId, BigDecimal amount) {
         Transaction transaction = Transaction.getCreditInstance(
                 accountId, correlationId, amount
         );
         transactionRepository.save(transaction);
+        return transactionMapper.toResponseDto(transaction);
     }
 
 }

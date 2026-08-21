@@ -1,6 +1,5 @@
 package dev.rynwllngtn.bank.transaction.domain;
 
-import dev.rynwllngtn.common.domain.AuditableEntity;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

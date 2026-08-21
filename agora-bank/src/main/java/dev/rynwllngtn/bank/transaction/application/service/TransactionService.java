@@ -9,7 +9,7 @@ public interface TransactionService {
 
     TransactionResponseDto findById(UUID id);
 
-    void debit(UUID accountId, BigDecimal amount);
-    void credit(UUID accountId, BigDecimal amount);
+    TransactionResponseDto debit(UUID accountId, UUID correlationId, BigDecimal amount);
+    TransactionResponseDto credit(UUID accountId, UUID correlationId, BigDecimal amount);
 
 }
