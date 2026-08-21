@@ -1,5 +1,8 @@
 package dev.rynwllngtn.bank.account.domain;
 
+import dev.rynwllngtn.bank.account.domain.exception.InactiveAccountException;
+import dev.rynwllngtn.bank.account.domain.exception.InsufficientFundsException;
+import dev.rynwllngtn.bank.account.domain.exception.InvalidAmountException;
 import dev.rynwllngtn.common.domain.AuditableEntity;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
@@ -43,6 +46,19 @@ public class Account extends AuditableEntity {
         this.balance = BigDecimal.ZERO;
     }
 
+    public void deposit(BigDecimal amount) {
+        validateActiveAccount();
+        validateAmount(amount);
+        balance = balance.add(amount);
+    }
+
+    public void withdraw(BigDecimal amount) {
+        validateActiveAccount();
+        validateAmount(amount);
+        validateSufficientFunds(amount);
+        balance = balance.subtract(amount);
+    }
+
     public void activate() {
         this.status = AccountStatus.ACTIVE;
     }
@@ -53,6 +69,24 @@ public class Account extends AuditableEntity {
 
     public void suspend() {
         this.status = AccountStatus.SUSPENDED;
+    }
+
+    private void validateActiveAccount() {
+        if (status != AccountStatus.ACTIVE) {
+            throw new InactiveAccountException("A conta precisa estar ativa para realizar essa operação");
+        }
+    }
+
+    private void validateAmount(BigDecimal amount) {
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new InvalidAmountException("Valor inválido para esta operação");
+        }
+    }
+
+    private void validateSufficientFunds(BigDecimal amount) {
+        if (balance.compareTo(amount) < 0) {
+            throw new InsufficientFundsException("Saldo insuficiente");
+        }
     }
 
 }

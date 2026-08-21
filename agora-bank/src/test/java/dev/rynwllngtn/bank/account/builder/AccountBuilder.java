@@ -4,6 +4,7 @@ import dev.rynwllngtn.bank.account.application.dto.AccountResponseDto;
 import dev.rynwllngtn.bank.account.domain.Account;
 import dev.rynwllngtn.bank.account.domain.AccountDetails;
 import dev.rynwllngtn.bank.account.domain.AccountStatus;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -20,6 +21,7 @@ public class AccountBuilder {
 
         private UUID customerId = defaultCustomerId;
         private final AccountDetails details = new AccountDetails(defaultAccountNumber);
+        private BigDecimal balance = BigDecimal.ZERO;
 
         private Entity() {
         }
@@ -28,8 +30,17 @@ public class AccountBuilder {
             return new Entity();
         }
 
+        public Entity withBalance(BigDecimal balance) {
+            this.balance = balance;
+            return this;
+        }
+
         public Account build() {
-            return new Account(customerId, details);
+            Account account = new Account(customerId, details);
+            if (this.balance != null && this.balance.compareTo(BigDecimal.ZERO) != 0) {
+                ReflectionTestUtils.setField(account, "balance", this.balance);
+            }
+            return account;
         }
 
     }
@@ -56,7 +67,7 @@ public class AccountBuilder {
         }
 
         public AccountResponseDto build() {
-            return new AccountResponseDto(id, customerId, agency, number, bankCode , status, balance);
+            return new AccountResponseDto(id, customerId, agency, number, bankCode, status, balance);
         }
 
         public static AccountResponseDto fromEntity(Account account) {
