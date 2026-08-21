@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -48,6 +49,24 @@ public class AccountServiceImplementation implements AccountService {
         }
         Account account = new Account(customerId, newAccountDetails());
         accountRepository.save(account);
+    }
+
+    @Override
+    @Transactional
+    public AccountResponseDto deposit(UUID id, BigDecimal amount) {
+        Account account = findByIdOrThrow(id);
+        account.deposit(amount);
+        account = accountRepository.save(account);
+        return accountMapper.toResponseDto(account);
+    }
+
+    @Override
+    @Transactional
+    public AccountResponseDto withdraw(UUID id, BigDecimal amount) {
+        Account account = findByIdOrThrow(id);
+        account.withdraw(amount);
+        account = accountRepository.save(account);
+        return accountMapper.toResponseDto(account);
     }
 
     @Override
